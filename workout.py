@@ -7,8 +7,8 @@ from gtts import gTTS
 
 # Define the file path (hardcoded)
 file_path = 'exercises.json'
-pygame.init()
 def shout(number):
+    pygame.init()
     tts = gTTS(text=str(number), lang='en', slow=False)
     tts.save(f"sounds/{number}.mp3")
     pygame.mixer.music.load(f"sounds/{number}.mp3")
