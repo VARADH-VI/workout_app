@@ -8,7 +8,6 @@ from gtts import gTTS
 # Define the file path (hardcoded)
 file_path = 'exercises.json'
 def shout(number):
-    pygame.init()
     tts = gTTS(text=str(number), lang='en', slow=False)
     tts.save(f"sounds/{number}.mp3")
     pygame.mixer.music.load(f"sounds/{number}.mp3")
@@ -45,7 +44,7 @@ def display_exercise_selection(exercises):
     return selected_exercises
 
 def start_workout(set_text, rep_text, sets, reps, col2):
-    # c = st.container()
+    pygame.init()
     for j in range(1, sets+1):
         shout(f"Set {j}")
         time.sleep(15)
