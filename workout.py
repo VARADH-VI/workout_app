@@ -14,7 +14,7 @@ if 'key' not in st.session_state:
 
 
 def shout(number):
-    st.session_state.init()
+    st.session_state.key.init()
     tts = gTTS(text=str(number), lang='en', slow=False)
     tts.save(f"sounds/{number}.mp3")
     st.session_state.key.mixer.music.load(f"sounds/{number}.mp3")
