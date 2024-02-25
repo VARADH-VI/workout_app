@@ -14,11 +14,11 @@ if 'key' not in st.session_state:
 
 
 def shout(number):
-    st.session_state.key = st.session_state.key.init()
+    pygame.init()
     tts = gTTS(text=str(number), lang='en', slow=False)
     tts.save(f"sounds/{number}.mp3")
-    st.session_state.key.mixer.music.load(f"sounds/{number}.mp3")
-    st.session_state.key.mixer.music.play()
+    pygame.mixer.music.load(f"sounds/{number}.mp3")
+    pygame.mixer.music.play()
 
 
 def load_json_data(file_path):
