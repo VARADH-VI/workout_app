@@ -9,12 +9,12 @@ from gtts import gTTS
 file_path = 'exercises.json'
 
 if 'key' not in st.session_state:
-    st.session_state['key'] = pygame
+    st.session_state['key'] = "key"
 
 
 
 def shout(number):
-    pygame.init()
+    # pygame.init()
     tts = gTTS(text=str(number), lang='en', slow=False)
     tts.save(f"sounds/{number}.mp3")
     pygame.mixer.music.load(f"sounds/{number}.mp3")
