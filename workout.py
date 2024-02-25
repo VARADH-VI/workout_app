@@ -63,7 +63,8 @@ def display_exercise_selection(exercises):
 def start_workout(set_text, rep_text, sets, reps):
     for j in range(1, sets+1):
         shout(f"Set {j}")
-        time.sleep(15)
+        if j is not 1:
+            time.sleep(15)
         set_text.text(f"Set: {j}")
         for i in range(1, reps+1):
             rep_text.text(f"Repetition: {i}")
