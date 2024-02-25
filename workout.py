@@ -1,20 +1,26 @@
 import streamlit as st
 import json
 import time
-import pygame
+import base64
 import os
 from gtts import gTTS
 
 # Define the file path (hardcoded)
 file_path = 'exercises.json'
 
-pygame_initialized = pygame.init()
-
-# Check if pygame was initialized successfully
-if pygame_initialized[1] > 0:
-    st.error("Failed to initialize pygame")
-else:
-    st.success("pygame initialized successfully")
+def autoplay_audio(file_path: str):
+    with open(file_path, "rb") as f:
+        data = f.read()
+        b64 = base64.b64encode(data).decode()
+        md = f"""
+            <audio controls autoplay="true">
+            <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+            </audio>
+            """
+        st.markdown(
+            md,
+            unsafe_allow_html=True,
+        )
 
 
 
@@ -22,8 +28,7 @@ def shout(number):
     # pygame.init()
     tts = gTTS(text=str(number), lang='en', slow=False)
     tts.save(f"sounds/{number}.mp3")
-    pygame.mixer.music.load(f"sounds/{number}.mp3")
-    pygame.mixer.music.play()
+    autoplay_audio(f"sounds/{number}.mp3")
 
 
 def load_json_data(file_path):
