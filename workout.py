@@ -40,10 +40,13 @@ def display_workout(selected_exercises):
         st.write(f"Description: {exercise['description']}")
         sets = st.slider(f"How many Sets for {exercise['name']}?", 1, 5, 3)
         reps = st.slider(f"How many Reps for {exercise['name']}?", 5, 15, 9)
-        for j in range(sets):
-            with st.expander(f"Set: {j}"):
+        with st.button("Start"):
+            set_test = st.header(f"Set: 1")
+            rep_text = st.subheader(f"Rep: 1")
+            for j in range(sets):
+                set_test.header(f"Set: {j}")
                 for i in range(reps):
-                    st.write("Repetition:", i)
+                    rep_text.subheader(f"Repetition: {i}")
                     time.sleep(3)  # Sleep for 3 seconds
 
 # Load the JSON data using the function
