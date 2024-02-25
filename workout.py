@@ -7,11 +7,17 @@ from gtts import gTTS
 
 # Define the file path (hardcoded)
 file_path = 'exercises.json'
+
+if 'key' not in st.session_state:
+    st.session_state['pygame'] = pygame
+
+
+
 def shout(number):
     tts = gTTS(text=str(number), lang='en', slow=False)
     tts.save(f"sounds/{number}.mp3")
-    pygame.mixer.music.load(f"sounds/{number}.mp3")
-    pygame.mixer.music.play()
+    st.session_state.key.mixer.music.load(f"sounds/{number}.mp3")
+    st.session_state.key.mixer.music.play()
 
 
 def load_json_data(file_path):
@@ -43,8 +49,7 @@ def display_exercise_selection(exercises):
             selected_exercises.append(exercise)
     return selected_exercises
 
-def start_workout(set_text, rep_text, sets, reps, col2):
-    pygame.init()
+def start_workout(set_text, rep_text, sets, reps):
     for j in range(1, sets+1):
         shout(f"Set {j}")
         time.sleep(15)
@@ -63,7 +68,7 @@ def display_workout(selected_exercises,sets,reps, col2):
             col2.write(f"Description: {exercise['description']}")
             set_text = col2.text(f"Set: 1")
             rep_text = col2.text(f"Rep: 1")
-            start_workout(set_text, rep_text, sets, reps, col2)
+            start_workout(set_text, rep_text, sets, reps)
 
 # Load the JSON data using the function
 data = load_json_data(file_path)
