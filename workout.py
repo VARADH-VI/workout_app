@@ -8,8 +8,13 @@ from gtts import gTTS
 # Define the file path (hardcoded)
 file_path = 'exercises.json'
 
-if 'key' not in st.session_state:
-    st.session_state['key'] = "key"
+pygame_initialized = pygame.init()
+
+# Check if pygame was initialized successfully
+if pygame_initialized[1] > 0:
+    st.error("Failed to initialize pygame")
+else:
+    st.success("pygame initialized successfully")
 
 
 
