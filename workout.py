@@ -1,9 +1,19 @@
 import streamlit as st
 import json
 import time
+import pygame
+import os
+from gtts import gTTS
 
 # Define the file path (hardcoded)
 file_path = 'exercises.json'
+pygame.init()
+def shout(number):
+    tts = gTTS(text=str(number), lang='en', slow=False)
+    tts.save(f"sounds/{number}.mp3")
+    pygame.mixer.music.load(f"sounds/{number}.mp3")
+    pygame.mixer.music.play()
+
 
 def load_json_data(file_path):
     try:
@@ -34,24 +44,30 @@ def display_exercise_selection(exercises):
             selected_exercises.append(exercise)
     return selected_exercises
 
-def display_workout(selected_exercises):
-    for exercise in selected_exercises:
-        st.write(f"Performing exercise: {exercise['name']} - {exercise['category']}")
-        st.write(f"Description: {exercise['description']}")
-        sets = st.slider(f"How many Sets for {exercise['name']}?", 1, 5, 3)
-        reps = st.slider(f"How many Reps for {exercise['name']}?", 5, 15, 9)
-        if st.button("Start"):
-            set_test = st.header(f"Set: 1")
-            rep_text = st.subheader(f"Rep: 1")
-            for j in range(sets):
-                set_test.header(f"Set: {j}")
-                for i in range(reps):
-                    rep_text.subheader(f"Repetition: {i}")
-                    time.sleep(3)  # Sleep for 3 seconds
+def start_workout(set_text, rep_text, sets, reps, col2):
+    # c = st.container()
+    for j in range(1, sets+1):
+        shout(f"Set {j}")
+        time.sleep(15)
+        set_text.text(f"Set: {j}")
+        for i in range(1, reps+1):
+            rep_text.text(f"Repetition: {i}")
+            shout(f"Rep {i}")
+            time.sleep(5)  # Sleep for 3 seconds
+
+def display_workout(selected_exercises,sets,reps, col2):
+    if sets is not 0 and reps is not 0:
+        for exercise in selected_exercises:
+            shout(f"Starting Excercise {exercise['name']}")
+            time.sleep(2)
+            col2.subheader(f"Excercise: {exercise['name']}")
+            col2.write(f"Description: {exercise['description']}")
+            set_text = col2.text(f"Set: 1")
+            rep_text = col2.text(f"Rep: 1")
+            start_workout(set_text, rep_text, sets, reps, col2)
 
 # Load the JSON data using the function
 data = load_json_data(file_path)
-
 # Streamlit app to add exercises
 st.sidebar.title('Add Exercise')
 
@@ -63,24 +79,26 @@ if st.sidebar.button('Add Exercise'):
     add_exercise(name, category, description)
     st.sidebar.success('Exercise added successfully!')
 
+col1, col2 = st.columns(2)
 # Display the current exercises
-st.title('Current Exercises')
+col1.title('Current Exercises')
 
 if 'exercises' in data:
     exercises = data['exercises']
     categories = set([exercise['category'] for exercise in exercises])
 
-    selected_category = st.selectbox('Select Workout Type', list(categories))
+    selected_category = col1.selectbox('Select Workout Type', list(categories))
     selected_exercises = [exercise for exercise in exercises if exercise['category'] == selected_category]
 
     if len(selected_exercises) > 0:
-        st.write("Select the exercises you want to include in your workout:")
+        col1.write("Select the exercises you want to include in your workout:")
         selected_exercises = display_exercise_selection(selected_exercises)
-
-        if st.button('Start Workout'):
-            st.success('Workout started!')
-            display_workout(selected_exercises)
+        sets = int(col1.number_input("Sets?", value=0, placeholder="Type a number..."))
+        reps = int(col1.number_input("Reps?", value=0, placeholder="Type a number..."))
+        if col1.button('Start Workout'):
+            col1.success('Workout started!')
+            display_workout(selected_exercises,sets,reps, col2)
     else:
-        st.write('No exercises found in this category.')
+        col1.write('No exercises found in this category.')
 else:
-    st.write('No exercises found.')
+    col1.write('No exercises found.')
