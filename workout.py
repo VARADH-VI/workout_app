@@ -9,7 +9,7 @@ from gtts import gTTS
 file_path = 'exercises.json'
 
 if 'key' not in st.session_state:
-    st.session_state['pygame'] = pygame
+    st.session_state['key'] = pygame
 
 
 
